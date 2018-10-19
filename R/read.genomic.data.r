@@ -9,54 +9,55 @@
 #' @examples
 #' read.genomic.data()
 
-read.genomic.data <-  function(genome="",chrn=NULL,bin=300,mc.cores=2){
-			avg <- c("dm3","mm9","hg19")
+read.genomic.data <-  function(genome="dm3",chrn=NULL,bin=300,mc.cores=2){
+			avg <- c("dm3","dm6","mm9","hg19")
 			if(!genome%in%avg){stop("Only genomic data for ",paste(avg[-length(avg)],collapse=", ")," and ",avg[length(avg)]," are available\n")}
 			if (genome=="dm3"){
 			      data(dm3.genomic)
-			      if(is.null(chrn)){ 
-					  chrn <- dm3.genomic.data$dchrn
+                  if(is.null(chrn)){
+					  chrn <- dm3$dchrn
 			      }else{
-				  if(any(!chrn%in%dm3.genomic.data$dchrn)){
+				  if(any(!chrn%in%dm3$dchrn)){
 					  stop("Not all of the selected chromosomes are present in the selected genome\n")
 				  }else{
 					  names(chrn) <- chrn
 				  }
 			      }
-                             CpG <- dm3.genomic.data$dCpG
-                             gc.cont.all <- dm3.genomic.data$gc.cont.all[chrn]
-			     chr.stat <- dm3.genomic.data$chr.stat
+                             CpG <- dm3$dCpG
+                             gc.cont.all <- dm3$gc.cont.all[chrn]
+			     chr.stat <- dm3$chr.stat
 			}
 			if (genome=="mm9"){
 			      data(mm9.genomic)
 			      if(is.null(chrn)){ 
-					  chrn <- mm9.genomic.data$dchrn
+					  chrn <- mm9$dchrn
 			      }else{
-				  if(any(!chrn%in%mm9.genomic.data$dchrn)){
+				  if(any(!chrn%in%mm9$dchrn)){
 					  stop("Not all of the selected chromosomes are present in the selected genome\n")
 				  }else{
 					  names(chrn) <- chrn
 				  }
 			      }			
-			      CpG <- mm9.genomic.data$dCpG			 
-			      gc.cont.all <- mm9.genomic.data$gc.cont.all[chrn]
-                              chr.stat <- mm9.genomic.data$chr.stat 
+			      CpG <- mm9$dCpG
+			      gc.cont.all <- mm9$gc.cont.all[chrn]
+                              chr.stat <- mm9$chr.stat
 			}			
 			if (genome=="hg19"){
-# 			      data(hg19.genomic)
+			      data(hg19.genomic)
 			      if(is.null(chrn)){ 
-					  chrn <- hg19.genomic.data$dchrn
+					  chrn <- hg19$dchrn
 			      }else{
-				  if(any(!chrn%in%hg19.genomic.data$dchrn)){
+				  if(any(!chrn%in%hg19$dchrn)){
 					  stop("Not all of the selected chromosomes are present in the selected genome\n")
 				  }else{
 					  names(chrn) <- chrn
 				  }
 			      }			
-			      CpG <- hg19.genomic.data$dCpG
-			      gc.cont.all <- hg19.genomic.data$gc.cont.all[chrn]
-                              chr.stat <- hg19.genomic.data$chr.stat 
+			      CpG <- hg19$dCpG
+			      gc.cont.all <- hg19$gc.cont.all[chrn]
+                              chr.stat <- hg19$chr.stat
 			}
+            
 		       gc.cont     <- count.gc.cont(gcc=gc.cont.all,bin=bin,mc.cores=mc.cores,chrn=chrn)
 		       if(!is.null(CpG)){
 			CpG   <- CpG[which(CpG[,1]%in%chrn),] 
