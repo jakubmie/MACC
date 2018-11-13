@@ -10,39 +10,51 @@
 #' @examples
 #' read.tags()
 
-read.tags <- function(setlist=NULL,path2files=NULL,chrn=NULL,mc.cores=2,filter.anomalies=TRUE){
-	      if(is.null(setlist)){stop("File names were not provided")}
-	      if(is.null(path2files)){stop("A path to files was not provided")}
-	      if(is.null(chrn)){stop("Chromosome names were not provided")}
-              if(any(names(chrn)!=chrn)) {names(chrn) <- chrn}
-              tt <- list()
-    for (nsets in names(setlist)) {#nsets <- names(setlist)[1]
-        sets <- setlist[[nsets]]
-        names(sets) <- sets
-        for (set in sets) {#sets[2]->set
-            fname <- paste(path2files, set, sep = "")
-            cat("Reading ", fname, "\t")
-            tags <- read.bam.file(fname = fname)
-            if (any(!chrn %in% names(tags))) {
-                tmp <- paste(chrn[!chrn %in% names(tags)], collapse = " ")
-                stop(paste(tmp, " not in ", set, " chromosome names", 
-                  sep = ""))
-            }
-            tags <- tags[chrn]
-	    if(filter.anomalies){
-		    tags <- parallel::mclapply(tags,function(c){
-			      inp <- MACC:::rta(tv=c[which(c>0)])
-			      inn <- MACC:::rta(tv=c[which(c<0)])
-			      pp  <- which(!inp)
-			      np  <- which(!inn)
-			      p   <- unique(c(c((pp*2-1),pp*2),c((np*2-1),np*2)))
-			      return(c[which(!((1:length(c)) %in% p))])
-		    },mc.cores=mc.cores)
-	    }
-	    tt[[nsets]][[set]] <- tags
-            cat("done\n")
-        }
+read.tags <- function (setlist, path2files, chrn, mc.cores = 2, filter.anomalies = TRUE) 
+{
+  if (is.null(setlist)) {
+    stop("File names were not provided")
+  }
+  if (is.null(path2files)) {
+    stop("A path to files was not provided")
+  }
+  if (is.null(chrn)) {
+    stop("Chromosome names were not provided")
+  }
+  if (any(names(chrn) != chrn)) {
+    names(chrn) <- chrn
+  }
+  tt <- list()
+  for (nsets in names(setlist)) {
+    sets <- setlist[[nsets]]
+    names(sets) <- sets
+    for (set in sets) {
+      fname <- paste(path2files, set, sep = "")
+      cat("Reading ", fname, "\t")
+      tags <- read.bam.file(fname = fname)
+      if(length(grep("^chr",names(tags)))==0){
+        names(tags) <- paste("chr",names(tags),sep="")
+      }
+      if (any(!chrn %in% names(tags))) {
+        tmp <- paste(chrn[!chrn %in% names(tags)], collapse = " ")
+        stop(paste(tmp, " not in ", set, " chromosome names", 
+                   sep = ""))
+      }
+      tags <- tags[chrn]
+      if (filter.anomalies) {
+        tags <- parallel::mclapply(tags, function(c) {
+          inp <- MACC:::rta(tv = c[which(c > 0)])
+          inn <- MACC:::rta(tv = c[which(c < 0)])
+          pp <- which(!inp)
+          np <- which(!inn)
+          p <- unique(c(c((pp * 2 - 1), pp * 2), c((np * 
+                                                      2 - 1), np * 2)))
+          return(c[which(!((1:length(c)) %in% p))])
+        }, mc.cores = mc.cores)
+      }
+      tt[[nsets]][[set]] <- tags
+      cat("done\n")
     }
-    return(tt)
+  }
+  return(tt)
 }
-
