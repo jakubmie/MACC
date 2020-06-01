@@ -16,11 +16,11 @@
 
 
 getMACCscores <- function(setlist=NULL,path2files=path2files,bin=300,tit.points=NULL,genome=NULL,chrn=NULL,mc.cores=2,filter.anomalies=TRUE,scale.genome.to.100Mb=TRUE,normalize.perBinSize=TRUE){
-		gen.dat      <- read.genomic.data(genome=genome,chrn=chrn,mc.cores=mc.cores)
-		tags         <- read.tags(setlist=setlist,path2files=path2files,chrn=gen.dat$chrn,mc.cores=mc.cores,filter.anomalies=filter.anomalies)
-		profiles     <- generate.profiles(tags,chrn=gen.dat$chrn,mc.cores=mc.cores)
-		tags.in.bins <- count.tags.in.bins(profs=profiles$frag.pos,chr.stat=gen.dat$chr.stat,chrn=gen.dat$chrn,mc.cores=mc.cores,bin=bin, 				  scale.genome.to.100Mb=scale.genome.to.100Mb,normalize.perBinSize=normalize.perBinSize)
-		Res         <- macc(tags.in.bins=tags.in.bins,tit.points=tit.points,gc.cont=gen.dat$gc.cont,chr.stat=gen.dat$chr.stat, chrn=gen.dat$chrn,bin=bin, mc.cores=mc.cores,CpG=gen.dat$CpG)
+		gen.dat <- read.genomic.data(genome=genome,chrn=chrn,mc.cores=mc.cores)
+		tags <- read.tags(setlist=setlist,path2files=path2files,chrn=gen.dat$chrn,mc.cores=mc.cores,filter.anomalies=filter.anomalies)
+		profiles <- generate.profiles(tags,chrn=gen.dat$chrn,mc.cores=mc.cores)
+		tags.in.bins <- count.tags.in.bins(profs=profiles$frag.pos,chr.stat=gen.dat$chr.stat,chrn=gen.dat$chrn,mc.cores=mc.cores,bin=bin,scale.genome.to.100Mb=scale.genome.to.100Mb,normalize.perBinSize=normalize.perBinSize)
+		Res <- macc(tags.in.bins=tags.in.bins,tit.points=tit.points,gc.cont=gen.dat$gc.cont,chr.stat=gen.dat$chr.stat, chrn=gen.dat$chrn,bin=bin, mc.cores=mc.cores,CpG=gen.dat$CpG)
 		Res
 		}
 

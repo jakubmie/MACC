@@ -5,7 +5,8 @@
 #' @param gc.cont a list of vectors containing information about GC content. Each vector corresponds to different chromosome.
 #' @param chrn a vector of chromosome names or NULL for all chromosomes.
 #' @param chr.stat a data.frame with sizes of analyzed chromosmes.
-#' @param mc.cores a number of cores for parallel computing.
+#' @param mc.cores a number of cores for parallel comput240*3
+ing.
 #' @param bin a size of a bin.
 #' @param CpG a GenomeRanges object with localization of CpG island.
 #' @param scale.genome.to.100Mb logical. Should the values be normalized to genome size?
