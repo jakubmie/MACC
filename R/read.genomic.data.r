@@ -43,7 +43,7 @@ read.genomic.data <-  function(genome="",chrn=NULL,bin=300,mc.cores=2){
                               chr.stat <- mm9.genomic.data$chr.stat 
 			}			
 			if (genome=="hg19"){
-# 			      data(hg19.genomic)
+ 			      data(hg19.genomic)
 			      if(is.null(chrn)){ 
 					  chrn <- hg19.genomic.data$dchrn
 			      }else{
